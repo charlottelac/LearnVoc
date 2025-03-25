@@ -5,7 +5,9 @@ from langchain_core.prompts import ChatPromptTemplate
 import random
 import re
 
-api_key = os.getenv("MISTRAL_API_KEY")
+#api_key = os.getenv("MISTRAL_API_KEY")
+# API KEY stored in secret file 
+api_key = st.secrets["mistral"]["api_key"]
 
 # Streamlit app title
 st.title("Enrich your vocabulary")
@@ -49,7 +51,10 @@ def load_new_round():
     )
 
     # Choose the LLM model 
-    model = init_chat_model("mistral-large-latest", model_provider="mistralai", api_key=api_key)
+    llm_model = "mistral-large-latest"
+
+    #llm_model = "mistral-small-latest"
+    model = init_chat_model(llm_model, model_provider="mistralai", api_key=api_key)
 
     # Get an answer
     prompt = prompt_template.invoke({"word": st.session_state.word})
