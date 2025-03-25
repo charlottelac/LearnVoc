@@ -7,7 +7,8 @@ import re
 
 #api_key = os.getenv("MISTRAL_API_KEY")
 # API KEY stored in secret file 
-api_key = st.secrets["mistral"]["api_key"]
+#api_key = st.secrets["mistral"]["api_key"]
+api_key = st.secrets["api_key"]
 
 # Streamlit app title
 st.title("Enrich your vocabulary")
