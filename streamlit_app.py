@@ -25,6 +25,9 @@ if "wrong_words" not in st.session_state:
 if "new_round" not in st.session_state:
     st.session_state.new_round = False
 
+if "score" not in st.session_state:
+    st.session_state.score = 0
+
 # Input word
 st.text_input("Enter a word", key = "word")
 
@@ -100,11 +103,12 @@ if st.session_state.choices:
             st.write(f"❌ Incorrect")
         elif len(correct) == len(st.session_state.correct_synonyms):
             st.write(f"✅ Correct")
+            st.session_state.score = +1
         elif len(correct) < len(st.session_state.correct_synonyms):
             st.write(f" Some correct words")
          
         st.info(f"The correct synonyms were: {st.session_state.correct_synonyms}")
-
+        st.write(f"The score is: {st.session_state.score}")
         if st.button("Next word"):
             st.session_state.choices = []
             st.session_state.correct_synonyms = []
