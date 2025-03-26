@@ -103,14 +103,16 @@ if st.session_state.choices:
             st.write(f"❌ Incorrect")
         elif len(correct) == len(st.session_state.correct_synonyms):
             st.write(f"✅ Correct")
-            st.session_state.score = +1
+            st.session_state.score = st.session_state.score +1
         elif len(correct) < len(st.session_state.correct_synonyms):
             st.write(f" Some correct words")
          
-        st.info(f"The correct synonyms were: {st.session_state.correct_synonyms}")
         st.write(f"The score is: {st.session_state.score}")
+        st.info(f"The correct synonyms were: {st.session_state.correct_synonyms}")
+        
         if st.button("Next word"):
             st.session_state.choices = []
             st.session_state.correct_synonyms = []
             st.session_state.wrong_words = []
             st.session_state.word = ""
+            st.session_state.score = st.session_state.score
