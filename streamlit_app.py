@@ -1,13 +1,11 @@
 import streamlit as st
-import os
 from langchain.chat_models import init_chat_model
 from langchain_core.prompts import ChatPromptTemplate
 import random
 import re
 
-#api_key = os.getenv("MISTRAL_API_KEY")
 # API KEY stored in secret file 
-#api_key = st.secrets["mistral"]["api_key"]
+
 api_key = st.secrets["api_key"]
 
 # Streamlit app title
@@ -25,8 +23,8 @@ if "wrong_words" not in st.session_state:
 if "new_round" not in st.session_state:
     st.session_state.new_round = False
 
-if "score" not in st.session_state:
-    st.session_state.score = 0
+#if "score" not in st.session_state:
+#    st.session_state.score = 0
 
 # Input word
 st.text_input("Enter a word", key = "word")
@@ -103,11 +101,11 @@ if st.session_state.choices:
             st.write(f"❌ Incorrect")
         elif len(correct) == len(st.session_state.correct_synonyms):
             st.write(f"✅ Correct")
-            st.session_state.score = st.session_state.score +1
+            #st.session_state.score = st.session_state.score +1
         elif len(correct) < len(st.session_state.correct_synonyms):
             st.write(f" Some correct words")
          
-        st.write(f"The score is: {st.session_state.score}")
+        #st.write(f"The score is: {st.session_state.score}")
         st.info(f"The correct synonyms were: {st.session_state.correct_synonyms}")
         
         if st.button("Next word"):
@@ -115,4 +113,4 @@ if st.session_state.choices:
             st.session_state.correct_synonyms = []
             st.session_state.wrong_words = []
             st.session_state.word = ""
-            st.session_state.score = st.session_state.score
+            #st.session_state.score = st.session_state.score
