@@ -23,8 +23,8 @@ if "wrong_words" not in st.session_state:
 if "new_round" not in st.session_state:
     st.session_state.new_round = False
 
-#if "score" not in st.session_state:
-#    st.session_state.score = 0
+if "score" not in st.session_state:
+    st.session_state.score = 0
 
 # Input word
 st.text_input("Enter a word", key = "word")
@@ -40,11 +40,17 @@ def extract_words_in_brackets(text):
     else:
         return None
 
-
 def load_new_round():
+    # Choose the LLM model 
+    llm_model = "mistral-large-latest"
+
+    #llm_model = "mistral-small-latest"
+    model = init_chat_model(llm_model, model_provider="mistralai", api_key=api_key)
+
     if not st.session_state.word:
         st.warning("Please enter a word and press Play.")
         return
+    
     # Prompt LLM to ask for synonyms
     system_template = "Give 3 synonyms for this word: {word}, formatted as a comma-separated list (e.g., fast, quick, speedy)."
 
@@ -52,15 +58,11 @@ def load_new_round():
         [("system", system_template)]
     )
 
-    # Choose the LLM model 
-    llm_model = "mistral-large-latest"
-
-    #llm_model = "mistral-small-latest"
-    model = init_chat_model(llm_model, model_provider="mistralai", api_key=api_key)
-
     # Get an answer
     prompt = prompt_template.invoke({"word": st.session_state.word})
     synonyms = model.invoke(prompt)
+
+    # Extract the synonyms from the answer
     synonyms_list = [resp.lower().strip(' ').strip('(').strip(')') for resp in synonyms.content.split(",")]
 
     # Generate disctractors
@@ -101,11 +103,11 @@ if st.session_state.choices:
             st.write(f"❌ Incorrect")
         elif len(correct) == len(st.session_state.correct_synonyms):
             st.write(f"✅ Correct")
-            #st.session_state.score = st.session_state.score +1
+            st.session_state.score = st.session_state.score +1
         elif len(correct) < len(st.session_state.correct_synonyms):
             st.write(f" Some correct words")
          
-        #st.write(f"The score is: {st.session_state.score}")
+        st.write(f"The score is: {st.session_state.score}")
         st.info(f"The correct synonyms were: {st.session_state.correct_synonyms}")
         
         if st.button("Next word"):
@@ -113,4 +115,4 @@ if st.session_state.choices:
             st.session_state.correct_synonyms = []
             st.session_state.wrong_words = []
             st.session_state.word = ""
-            #st.session_state.score = st.session_state.score
+            st.session_state.score = st.session_state.score
